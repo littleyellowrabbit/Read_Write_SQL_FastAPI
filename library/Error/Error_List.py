@@ -1,0 +1,4 @@
+
+class UnknownError(Exception):
+    pass
+
