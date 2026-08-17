@@ -10,20 +10,13 @@ engine: Optional[AsyncEngine] =None
 async def get_db_session() -> AsyncGenerator[AsyncSession, None]:
     global local_session
     async with local_session() as session:
-        try:
-            yield session
-        except Exception as e:
-            await session.rollback()
-            raise e
+        yield session
 
 async def init_datasheet()-> None:
     global engine
     async with engine.connect() as conn:
         async with conn.begin():
-            try:
-                await conn.run_sync(Df.SQLBase.metadata.create_all)
-            except Exception as e:
-                raise e
+            await conn.run_sync(Df.SQLBase.metadata.create_all)
     print("Init_datasheet OK")
 
 
